@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="jquery-ui.css">
+    <script src="jquery.js"></script>
+    <script src="jquery-ui.js"></script>
+    <title>fruitMatchProject</title>
+
+    <style>
+        #fruitArea,#nameArea{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        #fruitArea div,#nameArea div{
+            width: 150px;
+            height: 150px;
+            border: 2px solid;
+            margin: 27px;
+        }
+
+        #fruitArea img{
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <script>
+        var score = 0;
+
+        var fruitList=[
+            "img/banana.jpg",
+            "img/apple.jpg",
+            "img/kiwi.jpg",
+            "img/orange.jpg",
+            "img/pineapple.jpg",
+            "img/strawberry.jpg",
+            "img/watermelon.jpg",
+        ];
+        
+        var nameList=[
+            "Apple",
+            "Banana",
+            "Kiwi",
+            "Orange",
+            "Pineapple",
+            "Strawberry",
+            "Watermelon",
+        ];
+
+        $(document).ready(function(){
+            shuffle(fruitList);
+            $.each(fruitList,function(index,value){
+                var fruit = value.slice(4,-4);
+                $("<div><img src='"+value+"'></div>")
+                .appendTo("#fruitArea")
+                .draggable({revert:true,scope:fruit});
+            })
+        });
+
+        $(document).ready(function(){
+            shuffle(nameList);
+            $.each(nameList,function(index,value){
+                $("<div>"+value+"</div>")
+                .appendTo("#nameArea")
+                .droppable({scope:value.toLowerCase(),
+                    drop:function(event,ui) {
+                        $(ui.draggable).append($(this).text());
+                        score++; 
+                        $(this).hide("puff","fast");
+                        if (score == nameList.length) {
+                        $("<div><p>Congratution !!!</p></div>")
+                        .dialog();
+                        }
+                    }
+                })
+            })
+        });
+
+        function shuffle(arr) {
+            return arr.sort(function(){
+                return .5 -Math.random();
+            });
+        }
+
+    </script>
+
+
+    <div id="fruitArea"></div>
+    <div id="nameArea"></div>
+            
+    
+</body>
+</html>
